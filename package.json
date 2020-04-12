@@ -19,6 +19,7 @@
   "homepage": "https://github.com/nadinejuraschek/javascript-practice#readme",
   "dependencies": {
     "ejs": "^3.0.2",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "validator": "^13.0.0"
   }
 }

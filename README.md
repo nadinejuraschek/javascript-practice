@@ -4,7 +4,8 @@
 * JavaScript
 * Node.js
     * express
+    * ejs
+    * validator
 
-* ejs
 * MongoDB
     * mongoose
