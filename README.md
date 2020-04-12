@@ -1,1 +1,2 @@
-# javascript-practice
+# Social Media Clone
+
