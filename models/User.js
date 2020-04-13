@@ -54,6 +54,20 @@ User.prototype.validate = function() {
     };
 };
 
+User.prototype.login = function() {
+    return new Promise((resolve, reject) => {
+        this.cleanUp();
+        usersCollection.findOne({ username: this.data.username }, (err, attemptedUser) => {
+            // arrow functions do not manipulate or change the this keyword
+            if (attemptedUser && attemptedUser.password == this.data.password) {
+                resolve("Congrats!");
+            } else {
+                reject("Invalid username or password.");
+            }
+        });
+    });
+};
+
 // method .register won't be created every time new User() gets called, more efficient
 User.prototype.register = function() {
     // Step 1: validate user data
