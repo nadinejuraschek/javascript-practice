@@ -56,14 +56,16 @@ User.prototype.validate = function() {
 
 User.prototype.login = function() {
     return new Promise((resolve, reject) => {
+        // arrow functions do not manipulate or change the this keyword
         this.cleanUp();
-        usersCollection.findOne({ username: this.data.username }, (err, attemptedUser) => {
-            // arrow functions do not manipulate or change the this keyword
+        usersCollection.findOne({ username: this.data.username }).then((attemptedUser) => {
             if (attemptedUser && attemptedUser.password == this.data.password) {
                 resolve("Congrats!");
             } else {
                 reject("Invalid username or password.");
             }
+        }).catch(function() {
+            reject("Please try again later.");
         });
     });
 };
