@@ -7,6 +7,7 @@
     * dotenv
     * ejs
     * validator
+    * express-session
 
 * MongoDB
     * mongoose
