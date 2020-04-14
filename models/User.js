@@ -60,7 +60,8 @@ User.prototype.login = function() {
         // arrow functions do not manipulate or change the this keyword
         this.cleanUp();
         usersCollection.findOne({ username: this.data.username }).then((attemptedUser) => {
-            if (attemptedUser && attemptedUser.password == this.data.password) {
+            // bcrypt.compareSync(unhashedTypedPassword, hashedValueInDB)
+            if (attemptedUser && bcrypt.compareSync(this.data.password, attemptedUser.password)) {
                 resolve("Congrats!");
             } else {
                 reject("Invalid username or password.");
