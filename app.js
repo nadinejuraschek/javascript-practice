@@ -1,9 +1,22 @@
 // NPM PACKAGES
-const dotenv = require('dotenv');
+const   dotenv = require('dotenv');
 dotenv.config();
-const express = require('express');
+const   session = require('express-session'),
+        express = require('express');
 
 const app = express();
+
+let sessionOptions = session({ 
+    secret: "Random Fact: Space smells like seared steak.",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        // maxAge: ms * s/min * min/h * h/d --> cookie expires after a day
+        maxAge: 1000 * 60 * 60 * 24, 
+        httpOnly: true
+    }
+});
+app.use(sessionOptions);
 
 // FILES
 const router = require('./router');
