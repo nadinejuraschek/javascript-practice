@@ -66,6 +66,16 @@ User.prototype.validate = async function() {
                 this.errors.push("This username is already taken.");
             };
     };
+
+    // only if email is valid --> check to see if it is already taken
+    if (validator.isEmail(this.data.email)) {
+            // if email is found, email is set, otherwise emailExists = null
+            let emailExists = await usersCollection.findOne({ email: this.data.email });
+            // if emailExists = null, next if statement won't run
+            if (emailExists) {
+                this.errors.push("This email is already being used.");
+            };
+    };
 };
 
 User.prototype.login = function() {
