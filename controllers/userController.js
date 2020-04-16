@@ -21,22 +21,23 @@ exports.logout = function(req, res) {
     req.session.destroy(function() {
         res.redirect("/");
     });
-    
 };
 
 exports.register = function(req, res) {
     let user = new User(req.body);
-    user.register();
-    if (user.errors.length > 0) {
-        user.errors.forEach(function(err) {
+    user.register().then(() => {
+        req.session.user = { username: user.data.username };
+        req.session.save(function() {
+            res.redirect("/");
+        });
+    }).catch((regErrors) => {
+        regErrors.forEach(function(err) {
             req.flash("regErrors", err);
         });
         req.session.save(function() {
             res.redirect("/");
         });
-    } else {
-        res.send("Congrats! There are no errors.");
-    }
+    });
 };
 
 exports.home = function(req, res) {
