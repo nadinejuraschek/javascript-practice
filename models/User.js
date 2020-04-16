@@ -27,7 +27,7 @@ User.prototype.cleanUp = function() {
     };
 };
 
-User.prototype.validate = function() {
+User.prototype.validate = async function() {
     if (this.data.username == "") {
         this.errors.push("You must provide a username!");
     };
@@ -53,6 +53,18 @@ User.prototype.validate = function() {
     };
     if (this.data.password.length > 100) {
         this.errors.push("Password can not exceed 100 characters.");
+    };
+
+    // only if username is valid --> check to see if it is already taken
+    if (this.data.username.length > 2 
+        && this.data.username.length <= 30 
+        && validator.isAlphanumeric(this.data.username)) {
+            // if username is found, username is set, otherwise usernameExists = null
+            let usernameExists = await usersCollection.findOne({ username: this.data.username });
+            // if usernameExists = null, next if statement won't run
+            if (usernameExists) {
+                this.errors.push("This username is already taken.");
+            };
     };
 };
 
