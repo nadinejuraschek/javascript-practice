@@ -5,14 +5,19 @@ exports.login = function(req, res) {
     user.login().then(function(result) {
         // req.session.user = {} can be anything, can be used anywhere
         req.session.user = { username: user.data.username };
-        res.send(result);
+        req.session.save(function() {
+            res.redirect("/");
+        });
     }).catch(function(err) {
         res.send(err);
     });
 };
 
 exports.logout = function(req, res) {
-    res.send("Thanks for trying to logout!");
+    req.session.destroy(function() {
+        res.redirect("/");
+    });
+    
 };
 
 exports.register = function(req, res) {
@@ -28,9 +33,8 @@ exports.register = function(req, res) {
 
 exports.home = function(req, res) {
     if (req.session.user) {
-        res.send("Welcome to the app!");
+        res.render("home-dashboard", { username: req.session.user.username });
     } else {
         res.render("home-guest");
     }
-    
 };
