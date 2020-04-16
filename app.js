@@ -4,6 +4,7 @@ dotenv.config();
 const   express     = require("express"),
         session     = require("express-session"),
         MongoStore  = require("connect-mongo")(session),
+        flash       = require("connect-flash"),
         db          = require("./db"),
         app         = express();
 
@@ -19,6 +20,7 @@ let sessionOptions = session({
     }
 });
 app.use(sessionOptions);
+app.use(flash());
 
 // FILES
 const router = require('./router');

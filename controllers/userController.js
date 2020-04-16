@@ -9,7 +9,9 @@ exports.login = function(req, res) {
             res.redirect("/");
         });
     }).catch(function(err) {
-        res.send(err);
+        req.flash("errors", err);
+        res.redirect("/");
+
     });
 };
 
@@ -35,6 +37,6 @@ exports.home = function(req, res) {
     if (req.session.user) {
         res.render("home-dashboard", { username: req.session.user.username });
     } else {
-        res.render("home-guest");
+        res.render("home-guest", {  });
     }
 };
