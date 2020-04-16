@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
-const usersCollection = require("../db").collection("users");
 const validator = require("validator");
+
+const usersCollection = require("../db").db().collection("users");
 
 let User = function(data) {
     this.data = data;

@@ -1,13 +1,14 @@
 // NPM PACKAGES
-const   dotenv = require('dotenv');
+const   dotenv      = require("dotenv");
 dotenv.config();
-const   session = require('express-session'),
-        express = require('express');
-
+const   express     = require("express"),
+        session     = require("express-session"),
+        MongoStore  = require("connect-mongo")(session);
 const app = express();
 
 let sessionOptions = session({ 
     secret: "Random Fact: Space smells like seared steak.",
+    store: new MongoStore({ client: require("./db") }),
     resave: false,
     saveUninitialized: false,
     cookie: {

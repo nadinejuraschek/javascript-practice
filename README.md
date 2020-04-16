@@ -8,6 +8,6 @@
     * ejs
     * validator
     * express-session
+    * connect-mongo
 
 * MongoDB
-    * mongoose
