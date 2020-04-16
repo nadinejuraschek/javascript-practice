@@ -3,12 +3,13 @@ const   dotenv      = require("dotenv");
 dotenv.config();
 const   express     = require("express"),
         session     = require("express-session"),
-        MongoStore  = require("connect-mongo")(session);
-const app = express();
+        MongoStore  = require("connect-mongo")(session),
+        db          = require("./db"),
+        app         = express();
 
 let sessionOptions = session({ 
     secret: "Random Fact: Space smells like seared steak.",
-    store: new MongoStore({ client: require("./db") }),
+    store: new MongoStore({ client: db }),
     resave: false,
     saveUninitialized: false,
     cookie: {
