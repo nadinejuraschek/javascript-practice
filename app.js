@@ -22,6 +22,8 @@ let sessionOptions = session({
 app.use(sessionOptions);
 app.use(flash());
 
+// properties can be added to ejs templates by adding them to locals 
+// has to be defined before the router
 app.use(function (req, res, next) {
     res.locals.user = req.session.user;
     next();
