@@ -27,7 +27,6 @@
     "express-session": "^1.17.0",
     "md5": "^2.2.1",
     "mongodb": "^3.5.5",
-    "nodemon": "^2.0.3",
     "validator": "^13.0.0"
   }
 }

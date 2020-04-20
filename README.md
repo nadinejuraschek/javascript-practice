@@ -3,11 +3,13 @@
 ## Technologies
 * JavaScript
 * Node.js
-    * express
+    * bcryptjs
+    * connect-flash
+    * connect-mongo
     * dotenv
     * ejs
-    * validator
+    * express
     * express-session
-    * connect-mongo
+    * validator
 
 * MongoDB
