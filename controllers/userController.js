@@ -39,7 +39,6 @@ exports.logout = function(req, res) {
 };
 
 exports.register = function(req, res) {
-    console.log("in register function body");
     let user = new User(req.body);
     user.register().then(() => {
         req.session.user = {
@@ -68,7 +67,13 @@ exports.home = function(req, res) {
 };
 
 exports.ifUserExists = function(req, res, next) {
-    next();
+    User.findByUsername(req.params.username)
+    .then(function(userDocument) {
+        req.profileUser = userDocument;
+        next();
+    }).catch(function() {
+        res.render("404");
+    });
 };
 
 exports.profilePostsScreen = function(req, res) {
