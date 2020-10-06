@@ -7,7 +7,7 @@ const   express     = require("express"),
         flash       = require("connect-flash"),
         db          = require("./db"),
         app         = express(),
-        router  = require("./router");
+        router      = require("./router");
 
 let sessionOptions = session({
     secret: process.env.APP_SECRET,
@@ -32,7 +32,6 @@ app.use(function (req, res, next) {
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-
 app.use(express.static('public'));
 
 app.set('views', 'views');
