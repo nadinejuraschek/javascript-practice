@@ -39,6 +39,7 @@ exports.logout = function(req, res) {
 };
 
 exports.register = function(req, res) {
+    console.log("in register function body");
     let user = new User(req.body);
     user.register().then(() => {
         req.session.user = {

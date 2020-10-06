@@ -37,6 +37,6 @@ app.use(express.static('public'));
 app.set('views', 'views');
 app.set('view engine', 'ejs');
 
-app.get("/", router);
+app.use("/", router);
 
 module.exports = app;
