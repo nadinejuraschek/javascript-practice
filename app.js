@@ -35,6 +35,11 @@ app.use(function (req, res, next) {
 
     // make user session data available from within view templates
     res.locals.user = req.session.user;
+
+    // make all error and success flash messages available for all templates
+    res.locals.errors = req.flash("errors");
+    res.locals.success = req.flash("success");
+
     next();
 });
 
