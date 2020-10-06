@@ -1,6 +1,6 @@
 const   postsCollection = require("../db").db().collection("posts"),
         ObjectID        = require("mongodb").ObjectID,
-        User            = require("../App").
+        User            = require("../app");
 
 let Post = function(data, userID) {
     this.data = data;
@@ -48,13 +48,12 @@ Post.prototype.create = function() {
                 reject(this.errors);
             });
         } else {
-            // reject
             reject(this.errors);
         };
     });
 };
 
-Post.findSingleById = function(id) {
+Post.prototype.findSingleById = function(id) {
     return new Promise(async function(resolve, reject) {
         if (typeof(id) != "string" || !ObjectID.isValid(id)) {
             reject();
@@ -90,6 +89,7 @@ Post.findSingleById = function(id) {
         });
 
         if (posts.length) {
+            console.log(posts[0]);
             resolve(posts[0]);
         } else {
             reject();

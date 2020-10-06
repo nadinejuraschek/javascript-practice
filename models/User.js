@@ -1,14 +1,13 @@
-const   bcrypt      = require("bcryptjs"),
-        validator   = require("validator"),
-        md5         = require("md5");
-
-const usersCollection = require("../db").db().collection("users");
+const   bcrypt          = require("bcryptjs"),
+        validator       = require("validator"),
+        md5             = require("md5"),
+        usersCollection = require("../db").db().collection("users");
 
 let User = function(data, getAvatar) {
     this.data = data;
     this.errors = [];
     if (getAvatar == undefined) { getAvatar = false };
-    if (getAvatar) {this.getAvatar()};
+    if (getAvatar) { this.getAvatar() };
 };
 
 User.prototype.cleanUp = function() {
@@ -33,6 +32,7 @@ User.prototype.cleanUp = function() {
 User.prototype.validate = function() {
     return new Promise(async (resolve, reject) => {
 
+        // username validation
         if (this.data.username == "") {
             this.errors.push("You must provide a username!");
         };
@@ -43,13 +43,15 @@ User.prototype.validate = function() {
             this.errors.push("Username must be at least 3 characters long.");
         };
         if (this.data.username.length > 30) {
-            this.errors.push("Username can not exceed 30 characters.");
+            this.errors.push("Username cannot exceed 30 characters.");
         };
     
+        // email validation
         if (!validator.isEmail(this.data.email)) {
             this.errors.push("You must provide a valid email address!");
         };
     
+        // password validation
         if (this.data.password == "") {
             this.errors.push("You must provide a password!");
         };
@@ -57,7 +59,7 @@ User.prototype.validate = function() {
             this.errors.push("Password must be at least 6 characters.");
         };
         if (this.data.password.length > 100) {
-            this.errors.push("Password can not exceed 100 characters.");
+            this.errors.push("Password cannot exceed 100 characters.");
         };
     
         // only if username is valid --> check to see if it is already taken
@@ -82,7 +84,7 @@ User.prototype.validate = function() {
                 };
         };
 
-        resolve()
+        resolve();
     });
 };
 
