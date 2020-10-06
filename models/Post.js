@@ -2,10 +2,11 @@ const   postsCollection = require("../db").db().collection("posts"),
         ObjectID        = require("mongodb").ObjectID,
         User            = require("../app");
 
-let Post = function(data, userID) {
+let Post = function(data, userID, requestedPostID) {
     this.data = data;
     this.errors = [];
     this.userID = userID;
+    this.requestedPostID = requestedPostID;
 };
 
 Post.prototype.cleanUp = function() {
@@ -52,6 +53,39 @@ Post.prototype.create = function() {
         };
     });
 };
+
+Post.prototype.update = function() {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let post = await Post.findSingleById(this.requestedPostID, this.userID);
+            if (post.isVisitorOwner) {
+                // update db
+                let status = await this.actuallyUpdate();
+                resolve(status);
+            } else {
+                reject();
+            };
+        } catch {
+            reject();
+        }
+    });
+};
+
+Post.prototype.actuallyUpdate = function() {
+    return new Promise(async (resolve, reject) => {
+        this.cleanUp();
+        this.validate();
+        if (!this.errors.length) {
+            await postsCollection.findOneAndUpdate(
+                { _id: new ObjectID(this.requestedPostId) },
+                { $set: { title: this.data.title, body: this.data.body }}
+            );
+            resolve("success");
+        } else {
+            resolve("failure");
+        };
+    });
+}
 
 Post.reusablePostQuery = function(uniqueOperations, visitorId) {
     return new Promise(async function(resolve, reject) {
