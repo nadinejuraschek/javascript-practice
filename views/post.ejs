@@ -10,10 +10,10 @@
         </form>
       </span>
     </div>
-      
+
     <p class="text-muted small mb-4">
       <a href="#"><img class="avatar-tiny" src="<%= post.author.avatar %>"></a>
-      Posted by <a href="#"></a> on <%= post.author.username %></p>
+      Posted by <a href="#"></a> on <%= post.createdDate.getFullYear() %></p>
 
     <div class="body-content">
       <%= post.body %>

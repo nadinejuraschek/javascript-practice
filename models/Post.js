@@ -53,21 +53,14 @@ Post.prototype.create = function() {
     });
 };
 
-Post.prototype.findSingleById = function(id) {
+Post.reusablePostQuery = function(uniqueOperations) {
     return new Promise(async function(resolve, reject) {
-        if (typeof(id) != "string" || !ObjectID.isValid(id)) {
-            reject();
-            return;
-        };
-        // aggregate returns an array
-        // aggregate gives permission to run multiple operations
-        let posts = await postsCollection.aggregate([
-            { $match: { _id: new ObjectID(id) } },
-            { $lookup: { 
-                from: "users", 
-                localField: "author", 
-                foreignField: "_id", 
-                as: "authorDocument" 
+        let aggOperations = uniqueOperations.concat([
+            { $lookup: {
+                from: "users",
+                localField: "author",
+                foreignField: "_id",
+                as: "authorDocument"
             } },
             // $project defines which properties of the $lookup object is needed
             { $project: {
@@ -77,7 +70,10 @@ Post.prototype.findSingleById = function(id) {
                 // $lookup returns array, so [0] is the first looked up variable
                 author: { $arrayElemAt: ["$authorDocument", 0] }
             } }
-        ]).toArray();
+        ]);
+        // aggregate returns an array
+        // aggregate gives permission to run multiple operations
+        let posts = await postsCollection.aggregate(aggOperations).toArray();
 
         // clean up author property in each post object
         posts = posts.map(function(post) {
@@ -88,6 +84,21 @@ Post.prototype.findSingleById = function(id) {
             return post;
         });
 
+        resolve(posts);
+    });
+};
+
+Post.prototype.findSingleById = function(id) {
+    return new Promise(async function(resolve, reject) {
+        if (typeof(id) != "string" || !ObjectID.isValid(id)) {
+            reject();
+            return;
+        };
+
+        let posts = await Post.reusablePostQuery([
+            {$match: {_id: new ObjectID(id)}}
+        ]);
+
         if (posts.length) {
             console.log(posts[0]);
             resolve(posts[0]);
@@ -95,6 +106,13 @@ Post.prototype.findSingleById = function(id) {
             reject();
         }
     });
+};
+
+Post.findByAuthorId = function(authorId) {
+    return Post.reusablePostQuery([
+        {$match: {author: authorId}},
+        {$sort: {createdDate: -1}},
+    ]);
 };
 
 module.exports = Post;
