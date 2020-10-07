@@ -94,6 +94,36 @@ exports.profilePostsScreen = function(req, res) {
     });
 };
 
+exports.profileFollowersScreen = async function(req, res) {
+    try {
+        let followers = await Follow.getFollowersById(req.profileUser._id);
+        res.render('profile-followers', {
+            followers: followers,
+            profileUsername: req.profileUser.username,
+            profileAvatar: req.profileUser.avatar,
+            isFollowing: req.isFollowing,
+            isVisitorsProfile: req.isVisitorsProfile,
+        });
+    } catch {
+        res.render("404");
+    };
+};
+
+exports.profileFollowingScreen = async function(req, res) {
+    try {
+        let following = await Follow.getFollowingById(req.profileUser._id);
+        res.render('profile-followers', {
+            following: following,
+            profileUsername: req.profileUser.username,
+            profileAvatar: req.profileUser.avatar,
+            isFollowing: req.isFollowing,
+            isVisitorsProfile: req.isVisitorsProfile,
+        });
+    } catch {
+        res.render("404");
+    };
+};
+
 exports.sharedProfileData = async function(req, res, next) {
     let isVisitorsProfile = false;
     let isFollowing = false;
