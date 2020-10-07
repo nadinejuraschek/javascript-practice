@@ -1,7 +1,7 @@
 const   postsCollection = require("../db").db().collection("posts"),
         ObjectID        = require("mongodb").ObjectID,
         sanitizeHTML    = require("sanitize-html"),
-        User            = require("../app");
+        User            = require("./User");
 
 let Post = function(data, userID, requestedPostID) {
     this.data = data;
@@ -38,8 +38,8 @@ Post.prototype.validate = function() {
 
 Post.prototype.create = function() {
     return new Promise((resolve, reject) => {
-        this.cleanUp;
-        this.validate;
+        this.cleanUp();
+        this.validate();
 
         if (!this.errors.length) {
             // save post to DB
@@ -126,7 +126,7 @@ Post.reusablePostQuery = function(uniqueOperations, visitorId) {
     });
 };
 
-Post.prototype.findSingleById = function(id, visitorId) {
+Post.findSingleById = function(id, visitorId) {
     return new Promise(async function(resolve, reject) {
         if (typeof(id) != "string" || !ObjectID.isValid(id)) {
             reject();
