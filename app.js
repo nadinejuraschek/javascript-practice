@@ -5,6 +5,8 @@ const   express     = require("express"),
         session     = require("express-session"),
         MongoStore  = require("connect-mongo")(session),
         flash       = require("connect-flash"),
+        markdown    = require("marked"),
+        sanitizeHTML = require("sanitize-html"),
         db          = require("./db"),
         app         = express(),
         router      = require("./router");
@@ -26,6 +28,11 @@ app.use(flash());
 // properties can be added to ejs templates by adding them to res.locals
 // has to be defined before the router
 app.use(function (req, res, next) {
+    // make markdown function available for ejs
+    res.locals.filterUserHTML = function(content) {
+        return sanitizeHTML(markdown(content), { allowedTags: ["p", "br", "ul", "ol", "li", "strong", "i", "em", "h1", "h2", "h3", "h4", "h5", "h6"], allowedAttributes: {} });
+    };
+
     // make current user id available on the req object
     if (req.session.user) {
         req.visitorId = req.session.user._id;

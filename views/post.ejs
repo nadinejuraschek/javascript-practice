@@ -22,7 +22,7 @@
       Posted by <a href="#"></a> on <%= post.createdDate.getFullYear() %></p>
 
     <div class="body-content">
-      <%= post.body %>
+      <%- filterUserHTML(post.body) %>
     </div>
 
   </div>

@@ -1,5 +1,6 @@
 const   postsCollection = require("../db").db().collection("posts"),
         ObjectID        = require("mongodb").ObjectID,
+        sanitizeHTML    = require("sanitize-html"),
         User            = require("../app");
 
 let Post = function(data, userID, requestedPostID) {
@@ -19,10 +20,10 @@ Post.prototype.cleanUp = function() {
 
     // get rid of bogus properties --> don't let user send additional properties
     this.data = {
-        title: this.data.title.trim(),
-        body: this.data.body.trim(),
+        title: sanitizeHTML(this.data.title.trim(), {allowedTags: [], allowedAttributes: {}}),
+        body: sanitizeHTML(this.data.body.trim(), {allowedTags: [], allowedAttributes: {}}),
         author: ObjectID(this.userID),
-        createdDate: new Date()
+        createdDate: new Date(),
     };
 };
 
@@ -42,8 +43,8 @@ Post.prototype.create = function() {
 
         if (!this.errors.length) {
             // save post to DB
-            postsCollection.insertOne(this.data).then(() => {
-                resolve();
+            postsCollection.insertOne(this.data).then(info => {
+                resolve(info.ops[0]._id);
             }).catch(() => {
                 this.errors.push("Please try again later.");
                 reject(this.errors);
