@@ -113,7 +113,11 @@ Post.reusablePostQuery = function(uniqueOperations, visitorId) {
 
         // clean up author property in each post object
         posts = posts.map(function(post) {
+            // check if author is logged in user
             post.isVisitorOwner = post.authorId.equals(visitorId);
+
+            // remove author id from posts data, so it does not show in the browser
+            post.authorId = undefined;
 
             post.author = {
                 username:   post.author.username,
@@ -164,6 +168,20 @@ Post.delete = function(postIdToDelete, currentUserId) {
                 reject();
             };
         } catch {
+            reject();
+        };
+    });
+};
+
+Post.search = function(searchTerm) {
+    return new Promise(async (resolve, reject) => {
+        if (typeof(searchTerm) == "string") {
+            let posts = await Post.reusablePostQuery([
+                { $match: { $text: { $search: searchTerm } } },
+                { $sort: { score: { $meta: "textScore" } } },
+            ]);
+            resolve(posts);
+        } else {
             reject();
         };
     });
