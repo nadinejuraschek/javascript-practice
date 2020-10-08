@@ -113,7 +113,7 @@ User.prototype.register = function() {
         // Step 1: validate user data
         this.cleanUp();
         await this.validate();
-        
+
         // Step 2: only if no errors, save user data to DB
         if (!this.errors.length) {
             // hash user password
@@ -155,6 +155,21 @@ User.findByUsername = function(username) {
         }).catch(function() {
             reject();
         });
+    });
+};
+
+User.doesEmailExist = function(email) {
+    return new Promise(async function(resolve, reject) {
+        if (typeof(email) != "string") {
+            resolve(false);
+            return;
+        };
+        let user = await usersCollection.findOne({ email: email });
+        if (user) {
+            resolve(true);
+        } else {
+            resolve(false);
+        };
     });
 };
 
