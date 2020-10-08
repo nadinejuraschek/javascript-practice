@@ -64,8 +64,12 @@ app.use("/", router);
 const server = require("http").createServer(app),
 io = require("socket.io")(server);
 
-io.on("connection", function() {
+io.on("connection", function(socket) {
     console.log("Chat connection opened!");
+    socket.on("chatMessageFromBrowser", function(data) {
+        // console.log(data.message);
+        io.emit("chatMessageFromServer", { message: data.message });
+    });
 });
 
 module.exports = server;
