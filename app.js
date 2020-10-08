@@ -64,12 +64,21 @@ app.use("/", router);
 const server = require("http").createServer(app),
 io = require("socket.io")(server);
 
+io.use(function(socket, next) {
+    // make session data accessible in socket.io
+    sessionOptions(socket.request, socket.request.res, next);
+});
+
 io.on("connection", function(socket) {
     console.log("Chat connection opened!");
-    socket.on("chatMessageFromBrowser", function(data) {
-        // console.log(data.message);
-        io.emit("chatMessageFromServer", { message: data.message });
-    });
+    // only if user is logged in
+    if (socket.request.session.user) {
+        let user = socket.request.session.user;
+        socket.on("chatMessageFromBrowser", function(data) {
+            // console.log(data.message);
+            io.emit("chatMessageFromServer", { message: data.message, username: user.username, avatar: user.avatar });
+        });
+    };
 });
 
 module.exports = server;
