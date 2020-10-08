@@ -7,6 +7,7 @@ const   express     = require("express"),
         flash       = require("connect-flash"),
         markdown    = require("marked"),
         sanitizeHTML = require("sanitize-html"),
+        csrf        = require("csurf"),
         db          = require("./db"),
         app         = express(),
         router      = require("./router");
@@ -57,7 +58,26 @@ app.use(express.static('public'));
 app.set('views', 'views');
 app.set('view engine', 'ejs');
 
+// CSRF
+app.use(csrf());
+app.use(function(req, res, next) {
+    res.locals.csrfToken = req.csrfToken();
+    next();
+});
+
+// ROUTES
 app.use("/", router);
+
+app.use(function(err, req, res, next) {
+    if (err) {
+        if (err.code == "EBADCSRFTOKEN") {
+            req.flash("errors", "Cross site request forgery detected.");
+            req.session.save(() => res.redirect("/"));
+        } else {
+            res.render("404");
+        };
+    };
+});
 
 // SOCKET.IO - CHAT SETUP
 // power both express app and chat server by PORT

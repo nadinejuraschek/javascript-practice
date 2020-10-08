@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 export default class RegistrationForm {
-  // DOM Elements
   constructor() {
+    this._csrf = document.querySelector('[name="_csrf"]').value;
     this.form = document.querySelector("#registration-form");
     this.allFields = document.querySelectorAll("#registration-form .form-control");
     this.insertValidationElements();
@@ -23,6 +23,7 @@ export default class RegistrationForm {
       e.preventDefault();
       this.formSubmitHandler();
     });
+
     this.username.addEventListener("keyup", () => {
       this.isDifferent(this.username, this.usernameHandler);
     });
@@ -35,7 +36,7 @@ export default class RegistrationForm {
     this.username.addEventListener("blur", () => {
       this.isDifferent(this.username, this.usernameHandler);
     });
-    this.email.addEventListener("blue", () => {
+    this.email.addEventListener("blur", () => {
       this.isDifferent(this.email, this.emailHandler);
     });
     this.password.addEventListener("blur", () => {
@@ -52,12 +53,12 @@ export default class RegistrationForm {
     this.passwordAfterDelay();
 
     if (
-      this.username.isUnique &&
-      !this.username.errors &&
-      this.email.isUnique &&
-      !this.email.errors &&
-      !this.password.errors
-    ) {
+        this.username.isUnique &&
+        !this.username.errors &&
+        this.email.isUnique &&
+        !this.email.errors &&
+        !this.password.errors
+      ) {
       this.form.submit();
     };
   };
@@ -76,36 +77,26 @@ export default class RegistrationForm {
     this.username.timer = setTimeout(() => this.usernameAfterDelay(), 800);
   };
 
-  usernameImmediately() {
-    if (this.username.value != "" && !/^([a-zA-Z0-9]+)$/.test(this.username.value)) {
-      this.showValidationError(this.username, "Username can not contain special characters.");
+  passwordHandler() {
+    this.password.errors = false;
+    this.passwordImmediately();
+    clearTimeout(this.password.timer);
+    this.password.timer = setTimeout(() => this.passwordAfterDelay(), 800);
+  };
+
+  passwordImmediately() {
+    if (this.password.value.length > 50) {
+      this.showValidationError(this.password, "Password can not exceed 50 characters.");
     };
 
-    if (this.username.value.length > 30) {
-      this.showValidationError(this.username, "Username can not exceed 30 characters.");
-    };
-
-    if (!this.username.errors) {
-      this.hideValidationError(this.username);
+    if (!this.password.errors) {
+      this.hideValidationError(this.password);
     };
   };
 
-  usernameAfterDelay() {
-    if (this.username.value.length < 3) {
-      this.showValidationError(this.username, "Username can not be less than 3 characters long.");
-    };
-
-    if (!this.username.errors) {
-      axios.post("/doesUsernameExist", { username: this.username.value }).then(response => {
-        if (response.data) {
-          this.showValidationError(this.username, "This username is already taken.");
-          this.username.isUnique = false;
-        } else {
-          this.username.isUnique = true;
-        };
-      }).catch(() => {
-        console.log("Please try again later.");
-      });
+  passwordAfterDelay() {
+    if (this.password.value.length < 6) {
+      this.showValidationError(this.password, "Password must be at least 6 characters.");
     };
   };
 
@@ -117,43 +108,35 @@ export default class RegistrationForm {
 
   emailAfterDelay() {
     if (!/^\S+@\S+$/.test(this.email.value)) {
-      this.showValidationError(this.email, "Please provide a valid e-mail address.");
+      this.showValidationError(this.email, "You must provide a valid email address.");
     };
 
     if (!this.email.errors) {
-      axios.post("/doesEmailExist", { email: this.email.value }).then(response => {
+      axios.post('/doesEmailExist', {_csrf: this._csrf, email: this.email.value}).then((response) => {
         if (response.data) {
-          this.showValidationError(this.email, "This e-mail is already registered.");
           this.email.isUnique = false;
+          this.showValidationError(this.email, "That email is already being used.");
         } else {
           this.email.isUnique = true;
           this.hideValidationError(this.email);
-        };
+        }
       }).catch(() => {
         console.log("Please try again later.");
       });
     };
   };
 
-  passwordHandler() {
-    this.password.errors = false;
-    clearTimeout(this.password.timer);
-    this.password.timer = setTimeout(() => this.passwordAfterDelay(), 800);
-  };
-
-  passwordImmediately() {
-    if (this.password.value.length < 50) {
-      this.showValidationError(this.password, "Password can not exceed 50 characters.")
+  usernameImmediately() {
+    if (this.username.value != "" && !/^([a-zA-Z0-9]+)$/.test(this.username.value)) {
+      this.showValidationError(this.username, "Username can only contain letters and numbers.");
     };
 
-    if (this.password.errors) {
-      this.hideValidationError(this.password);
+    if (this.username.value.length > 30) {
+      this.showValidationError(this.username, "Username cannot exceed 30 characters.");
     };
-  };
 
-  passwordAfterDelay() {
-    if (this.password.value.length < 6) {
-      this.showValidationError(this.password, "Password must be at least 6 characters long.");
+    if (!this.username.errors) {
+      this.hideValidationError(this.username);
     };
   };
 
@@ -167,11 +150,28 @@ export default class RegistrationForm {
     el.errors = true;
   };
 
-  insertValidationElements() {
-    this.allFields.forEach(function(el) {
-      el.insertAdjacentHTML("afterend", `<div class='alert alert-danger small liveValidateMessage'></div>`);
-    });
+  usernameAfterDelay() {
+    if (this.username.value.length < 3) {
+      this.showValidationError(this.username, "Username must be at least 3 characters.");
+    };
+
+    if (!this.username.errors) {
+      axios.post('/doesUsernameExist', {_csrf: this._csrf, username: this.username.value}).then((response) => {
+        if (response.data) {
+          this.showValidationError(this.username, "That username is already taken.");
+          this.username.isUnique = false;
+        } else {
+          this.username.isUnique = true;
+        }
+      }).catch(() => {
+        console.log("Please try again later.");
+      });
+    };
   };
 
-
+  insertValidationElements() {
+    this.allFields.forEach(function(el) {
+      el.insertAdjacentHTML('afterend', '<div class="alert alert-danger small liveValidateMessage"></div>');
+    });
+  };
 };
