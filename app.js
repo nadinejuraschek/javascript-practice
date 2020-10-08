@@ -59,4 +59,13 @@ app.set('view engine', 'ejs');
 
 app.use("/", router);
 
-module.exports = app;
+// SOCKET.IO - CHAT SETUP
+// power both express app and chat server by PORT
+const server = require("http").createServer(app),
+io = require("socket.io")(server);
+
+io.on("connection", function() {
+    console.log("Chat connection opened!");
+});
+
+module.exports = server;

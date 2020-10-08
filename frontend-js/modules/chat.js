@@ -21,11 +21,15 @@ export default class Chat {
   };
 
   showChat() {
-    // if (!this.openedYet) {
-    //   this.openConnection();
-    // };
-    // this.openedYet = true;
+    if (!this.openedYet) {
+      this.openConnection();
+    };
+    this.openedYet = true;
     this.chatWrapper.classList.add("chat--visible");
+  };
+
+  openConnection() {
+    this.socket = io();
   };
 
   injectHTML() {
