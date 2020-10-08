@@ -80,7 +80,11 @@ io.on("connection", function(socket) {
         socket.on("chatMessageFromBrowser", function(data) {
             // console.log(data.message);
             // socket.broadcast will send message to all connected browsers, except the one who sent it
-            socket.broadcast.emit("chatMessageFromServer", { message: data.message, username: user.username, avatar: user.avatar });
+            socket.broadcast.emit("chatMessageFromServer", {
+                message: sanitizeHTML(data.message, { allowedTags: [], allowedAttributes: {} }),
+                username: user.username,
+                avatar: user.avatar,
+            });
         });
     };
 });

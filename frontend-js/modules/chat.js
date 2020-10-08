@@ -1,3 +1,5 @@
+import DOMPurify from 'dompurify';
+
 export default class Chat {
   // DOM Elements
   constructor() {
@@ -26,7 +28,7 @@ export default class Chat {
   // Methods
   sendMessageToServer() {
     this.socket.emit('chatMessageFromBrowser', { message: this.chatField.value });
-    this.chatLog.insertAdjacentHTML("beforeend", `
+    this.chatLog.insertAdjacentHTML("beforeend", DOMPurify.sanitize(`
       <!-- USER MESSAGE -->
       <div class="chat-self">
         <div class="chat-message">
@@ -36,7 +38,8 @@ export default class Chat {
         </div>
         <img class="chat-avatar avatar-tiny" src="${this.avatar}">
       </div>
-    `);
+    `));
+    this.chatLog.scrollTop = this.chatLog.scrollHeight;
     this.chatField.value = '';
     this.chatField.focus();
   };
@@ -51,6 +54,7 @@ export default class Chat {
     };
     this.openedYet = true;
     this.chatWrapper.classList.add("chat--visible");
+    this.chatField.focus();
   };
 
   openConnection() {
@@ -65,7 +69,7 @@ export default class Chat {
   };
 
   displayMessageFromServer(data) {
-    this.chatLog.insertAdjacentHTML("beforeend", `
+    this.chatLog.insertAdjacentHTML("beforeend", DOMPurify.sanitize(`
       <!-- CHAT PARTNER MESSAGE -->
       <div class="chat-other">
         <a href="#"><img class="avatar-tiny" src="${data.avatar}"></a>
@@ -74,7 +78,8 @@ export default class Chat {
           ${data.message}
         </div></div>
       </div>
-    `);
+    `));
+    this.chatLog.scrollTop = this.chatLog.scrollHeight;
   };
 
   injectHTML() {
