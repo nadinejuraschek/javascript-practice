@@ -5,6 +5,7 @@ export default class Chat {
     this.chatWrapper = document.querySelector("#chat-wrapper");
     this.openIcon = document.querySelector(".header-chat-icon");
     this.injectHTML();
+    this.chatLog = document.querySelector("#chat");
     this.chatField = document.querySelector("#chatField");
     this.chatForm = document.querySelector("#chatForm");
     this.closeIcon = document.querySelector(".chat-title-bar-close");
@@ -43,9 +44,22 @@ export default class Chat {
 
   openConnection() {
     this.socket = io();
-    this.socket.on("chatMessageFromServer", function(data) {
-      alert(data.message);
+    this.socket.on("chatMessageFromServer", data => {
+      this.displayMessageFromServer(data);
     });
+  };
+
+  displayMessageFromServer(data) {
+    this.chatLog.insertAdjacentHTML("beforeend", `
+    <!-- CHAT PARTNER MESSAGE -->
+    <div class="chat-other">
+      <a href="#"><img class="avatar-tiny" src="https://gravatar.com/avatar/b9216295c1e3931655bae6574ac0e4c2?s=128"></a>
+      <div class="chat-message"><div class="chat-message-inner">
+        <a href="#"><strong>barksalot:</strong></a>
+        ${data.message}
+      </div></div>
+    </div>
+    `);
   };
 
   injectHTML() {
@@ -69,13 +83,4 @@ export default class Chat {
 //           </div>
 //         </div>
 //         <img class="chat-avatar avatar-tiny" src="https://gravatar.com/avatar/f64fc44c03a8a7eb1d52502950879659?s=128">
-//       </div>
-
-//       <!-- CHAT PARTNER MESSAGE -->
-//       <div class="chat-other">
-//         <a href="#"><img class="avatar-tiny" src="https://gravatar.com/avatar/b9216295c1e3931655bae6574ac0e4c2?s=128"></a>
-//         <div class="chat-message"><div class="chat-message-inner">
-//           <a href="#"><strong>barksalot:</strong></a>
-//           I am doing well. How about you?
-//         </div></div>
 //       </div>
