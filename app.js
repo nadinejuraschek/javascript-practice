@@ -74,9 +74,13 @@ io.on("connection", function(socket) {
     // only if user is logged in
     if (socket.request.session.user) {
         let user = socket.request.session.user;
+
+        socket.emit("welcome", { username: user.username, avatar: user.avatar });
+
         socket.on("chatMessageFromBrowser", function(data) {
             // console.log(data.message);
-            io.emit("chatMessageFromServer", { message: data.message, username: user.username, avatar: user.avatar });
+            // socket.broadcast will send message to all connected browsers, except the one who sent it
+            socket.broadcast.emit("chatMessageFromServer", { message: data.message, username: user.username, avatar: user.avatar });
         });
     };
 });

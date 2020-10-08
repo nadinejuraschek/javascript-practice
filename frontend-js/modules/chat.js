@@ -25,7 +25,18 @@ export default class Chat {
 
   // Methods
   sendMessageToServer() {
-    this.socket.emit('chatMessageFromBrowser', {message: this.chatField.value});
+    this.socket.emit('chatMessageFromBrowser', { message: this.chatField.value });
+    this.chatLog.insertAdjacentHTML("beforeend", `
+      <!-- USER MESSAGE -->
+      <div class="chat-self">
+        <div class="chat-message">
+          <div class="chat-message-inner">
+            ${this.chatField.value}
+          </div>
+        </div>
+        <img class="chat-avatar avatar-tiny" src="${this.avatar}">
+      </div>
+    `);
     this.chatField.value = '';
     this.chatField.focus();
   };
@@ -44,6 +55,10 @@ export default class Chat {
 
   openConnection() {
     this.socket = io();
+    this.socket.on("welcome", data => {
+      this.username = data.username;
+      this.avatar = data.avatar;
+    });
     this.socket.on("chatMessageFromServer", data => {
       this.displayMessageFromServer(data);
     });
@@ -51,14 +66,14 @@ export default class Chat {
 
   displayMessageFromServer(data) {
     this.chatLog.insertAdjacentHTML("beforeend", `
-    <!-- CHAT PARTNER MESSAGE -->
-    <div class="chat-other">
-      <a href="#"><img class="avatar-tiny" src="${data.avatar}"></a>
-      <div class="chat-message"><div class="chat-message-inner">
-        <a href="#"><strong>${data.username}</strong></a>
-        ${data.message}
-      </div></div>
-    </div>
+      <!-- CHAT PARTNER MESSAGE -->
+      <div class="chat-other">
+        <a href="#"><img class="avatar-tiny" src="${data.avatar}"></a>
+        <div class="chat-message"><div class="chat-message-inner">
+          <a href="#"><strong>${data.username}</strong></a>
+          ${data.message}
+        </div></div>
+      </div>
     `);
   };
 
@@ -73,14 +88,3 @@ export default class Chat {
     `;
   };
 };
-
-
-// <!-- USER MESSAGE -->
-//       <div class="chat-self">
-//         <div class="chat-message">
-//           <div class="chat-message-inner">
-//             Hello, how are you?
-//           </div>
-//         </div>
-//         <img class="chat-avatar avatar-tiny" src="https://gravatar.com/avatar/f64fc44c03a8a7eb1d52502950879659?s=128">
-//       </div>
