@@ -1,19 +1,30 @@
 <%- include("includes/header") -%>
 
-  <div class="min-height container py-md-5 container--narrow mt-3">
+<%- include("includes/sidebar") -%>
+
+<main>
+
+  <div class="feed min-height container">
 
     <!-- FLASH MESSAGE -->
     <%- include("includes/flash") -%>
 
     <% if (posts.length) { %>
       <h2 class="text-center mb-4">What's New</h2>
-      <div class="list-group">
+      <div class="feed-list">
         <% posts.forEach(function(post) { %>
-          <a href="/post/<%= post._id %>" class="list-group-item list-group-item-action">
-            <img class="avatar-tiny" src="<%= post.author.avatar %>">
-            <strong><%= post.title %></strong>
-            <span class="text-muted small">by <%= post.author.username %> on <%= post.createdDate.getMonth() + 1 %>/<%= post.createdDate.getDate() %>/<%= post.createdDate.getFullYear() %></span>
-          </a>
+          <div class="feed-item">
+            <div class="feed-item-header">
+              <img class="avatar-feed" src="<%= post.author.avatar %>">
+              <div class="user-details">
+                <strong><%= post.title %></strong>
+                <span class="text-muted small">by <a href="/post/<%= post.author.username %>" class="user-name"><%= post.author.username %></a> on <%= post.createdDate.getMonth() + 1 %>/<%= post.createdDate.getDate() %>/<%= post.createdDate.getFullYear() %></span>
+              </div>
+            </div>
+            <p class="feed-body">
+              <%= filterUserHTML(post.body) %>
+            </p>
+          </div>
         <% }) %>
       </div>
     <% } else { %>
@@ -23,5 +34,7 @@
       </div>
     <% } %>
   </div>
+
+</main>
 
 <%- include("includes/footer") -%>
