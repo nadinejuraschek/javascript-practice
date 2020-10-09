@@ -32,7 +32,7 @@ export default class Chat {
       <!-- USER MESSAGE -->
       <div class="chat-self">
         <div class="chat-message">
-          <div class="chat-message-inner">
+          <div class="chat-message-inner chat-message-author">
             ${this.chatField.value}
           </div>
         </div>

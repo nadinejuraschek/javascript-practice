@@ -1,6 +1,6 @@
 <%- include('includes/header') %>
 
-<div class="container py-md-5 container--narrow">
+<div class="min-height container py-md-5 container--narrow mt3">
 
   <%- include('includes/flash') %>
 
@@ -8,10 +8,10 @@
     <h2><%= post.title %></h2>
     <% if (post.isVisitorOwner) { %>
       <span class="pt-2">
-        <a href="/post/<%= post._id %>/edit" class="text-primary mr-2" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit"></i></a>
+        <a href="/post/<%= post._id %>/edit" class="btn-icon mr-2" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit"></i></a>
         <form class="delete-post-form d-inline" action="/post/<%= post._id %>/delete" method="POST">
           <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-          <button class="delete-post-button text-danger" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash"></i></button>
+          <button class="delete-post-button btn-icon" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fas fa-trash"></i></button>
         </form>
       </span>
    <% } %>
