@@ -218,6 +218,29 @@ textarea.tall-textarea {
   }
 }
 
+.author-details {
+  display: flex;
+  align-items: center;
+}
+
+.author-details img {
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  margin: 16px 16px 32px 0;
+}
+
+.author-link {
+  margin: 0 10px;
+}
+
+.author-link:hover {
+  color: var(--yellow);
+  border-bottom: 2px solid var(--yellow);
+  padding-bottom: -.1em;
+  text-decoration: none;
+}
+
 .delete-post-button {
   cursor: pointer;
   background: none;
