@@ -36,7 +36,7 @@ export default class Chat {
             ${this.chatField.value}
           </div>
         </div>
-        <img class="chat-avatar avatar-tiny" src="${this.avatar}">
+        <img class="chat-avatar" src="${this.avatar}">
       </div>
     `));
     this.chatLog.scrollTop = this.chatLog.scrollHeight;
@@ -72,7 +72,7 @@ export default class Chat {
     this.chatLog.insertAdjacentHTML("beforeend", DOMPurify.sanitize(`
       <!-- CHAT PARTNER MESSAGE -->
       <div class="chat-other">
-        <a href="/profile/${data.username}"><img class="avatar-tiny" src="${data.avatar}"></a>
+        <a href="/profile/${data.username}"><img class="chat-avatar" src="${data.avatar}"></a>
         <div class="chat-message"><div class="chat-message-inner">
           <a href="/profile/${data.username}"><strong>${data.username}</strong></a>
           ${data.message}

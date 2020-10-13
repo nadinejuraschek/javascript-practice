@@ -404,7 +404,8 @@ textarea.tall-textarea {
 }
 
 .chat-title-bar {
-  background-color: var(--black);
+  background: linear-gradient(to right, #506a50, #567656, #5c835c, #629062, #689d68, #6fa66f, #75b075, #7cb97c, #85c185, #8ec88e, #98d098, #a1d8a1);
+  border-radius: 3px 3px 0 0 ;
   color: var(--white);
   padding: 4px 7px;
   display: flex;
@@ -418,6 +419,12 @@ textarea.tall-textarea {
 
 .chat-title-bar-close:hover {
   opacity: 1;
+}
+
+.chat-avatar {
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
 }
 
 .chat-log {
@@ -452,7 +459,7 @@ textarea.tall-textarea {
   text-align: right;
   padding: 4px 7px;
   border-radius: 12px;
-  background-color: var(--yellow);
+  background-color: #a1d8a1;
   color: var(--black);
 }
 
@@ -481,12 +488,13 @@ textarea.tall-textarea {
 }
 
 .chat-field {
+  border-radius: 0 0 3px 3px;
   width: 100%;
   box-sizing: border-box;
   padding: 10px 7px;
   border: none;
   outline: none;
-  font-size: .75rem;
+  font-size: 1rem;
 }
 
 .btn-success, .btn-primary {
