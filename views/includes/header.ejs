@@ -35,17 +35,9 @@
       <% } else { %>
         <form action="/login" method="POST" class="header-form-right">
           <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-          <div class="">
-            <div class="">
-              <input name="username" class="form-control form-control-sm input-dark" type="text" placeholder="Username" autocomplete="off">
-            </div>
-            <div class="">
-              <input name="password" class="form-control form-control-sm input-dark" type="password" placeholder="Password">
-            </div>
-            <div class="">
-              <button class="btn btn-primary btn-sm">Sign In</button>
-            </div>
-          </div>
+          <input name="username" class="input-dark" type="text" placeholder="Username" autocomplete="off">
+          <input name="password" class="input-dark" type="password" placeholder="Password">
+          <button class="btn btn-primary btn-sm">Sign In</button>
         </form>
       <% } %>
 
