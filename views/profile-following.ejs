@@ -1,6 +1,10 @@
 <%- include('includes/header') %>
 
-<div class="min-height container py-md-5 container--narrow mt-3">
+<%- include("includes/sidebar") -%>
+
+<main>
+
+<div class="feed min-height container">
 
   <!-- FLASH MESSAGE -->
   <%- include("includes/flash") -%>
@@ -10,12 +14,16 @@
 
   <div class="list-group">
     <% following.forEach(function(followedUser) { %>
-      <a href="/profile/<%= followedUser.username %>" class="list-group-item list-group-item-action">
-        <img class="avatar-tiny" src="<%= followedUser.avatar %>">
-        <%= followedUser.username %>
-      </a>
+      <div class="list-group-item list-group-item-author">
+        <div class="list-groupt-item-author">
+          <img class="avatar-tiny" src="<%= followedUser.avatar %>">
+          <a href="/profile/<%= followedUser.username %>"><strong><%= followedUser.username %></strong></a>
+        </div>
+      </div>
     <% }) %>
   </div>
 </div>
+
+</main>
 
 <%- include('includes/footer') %>
