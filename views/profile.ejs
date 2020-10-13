@@ -1,8 +1,10 @@
 <%- include('includes/header') %>
 
+<%- include("includes/sidebar") -%>
+
 <main>
 
-<div class="min-height container py-md-5 container--narrow mt-3">
+<div class="feed min-height container">
 
   <!-- FLASH MESSAGE -->
   <%- include("includes/flash") -%>
@@ -12,10 +14,15 @@
 
   <div class="list-group">
     <% posts.forEach(function(post) { %>
-      <a href="/post/<%= post._id %>" class="list-group-item list-group-item-action">
-        <img class="avatar-tiny" src="<%= post.author.avatar %>">
-        <strong><%= post.title %></strong> on <%= post.createdDate.getMonth() + 1 %>/<%= post.createdDate.getDate() %>/<%= post.createdDate.getFullYear() %>
-      </a>
+      <div class="list-group-item list-group-item-action">
+        <!-- <div class="list-groupt-item-author">
+          <img class="avatar-tiny" src="<%= post.author.avatar %>">
+          <p><strong><%= post.author.username %></strong></p>
+        </div> -->
+        <div class="list-group-item-content">
+          <a href="/post/<%= post._id %>"><strong><%= post.title %></strong> on <%= post.createdDate.getMonth() + 1 %>/<%= post.createdDate.getDate() %>/<%= post.createdDate.getFullYear() %></a>
+        </div>
+      </div>
     <% }) %>
   </div>
 </div>
